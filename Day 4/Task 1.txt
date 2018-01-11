@@ -1,0 +1,16 @@
+Query: select city, GROUP_CONCAT(name SEPARATOR ', ') AS 'Name of people living is particular city' from customers group by city;
+Output: 
++------------+------------------------------------------+
+| city       | Name of people living is particular city |
++------------+------------------------------------------+
+| NULL       | Keshav                                   |
+| Brazil     | Denial Jack                              |
+| GTA        | Tony Special                             |
+| New Jersey | Jack Sp                                  |
+| New York   | Cherlies Theron, Bobby Chacko            |
+| Toronto    | Eston M., Donna newman, Bob marley       |
+| USA        | Ashko Charles                            |
+| WDC        | Ashley                                   |
++------------+------------------------------------------+
+
+Explaination: I am printing the name of people living in a particular city, seprating the name with a comma.

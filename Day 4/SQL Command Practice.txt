@@ -1,0 +1,633 @@
+
+Setting environment for using XAMPP for Windows.
+731573@128-IMAC08 c:\xampp
+# mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 2
+Server version: 10.1.21-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2016, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| phpmyadmin         |
+| test               |
++--------------------+
+5 rows in set (0.03 sec)
+
+MariaDB [(none)]> use csd2208218;
+ERROR 1049 (42000): Unknown database 'csd2208218'
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| csd2204w18         |
+| information_schema |
+| mysql              |
+| performance_schema |
+| phpmyadmin         |
+| test               |
++--------------------+
+6 rows in set (0.00 sec)
+
+MariaDB [(none)]> use csd2204w18;
+Database changed
+MariaDB [csd2204w18]> show tables;
++----------------------+
+| Tables_in_csd2204w18 |
++----------------------+
+| customers            |
++----------------------+
+1 row in set (0.00 sec)
+
+MariaDB [csd2204w18]> desc customers;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| customersID | int(2)      | NO   | PRI | NULL    |       |
+| name        | varchar(40) | YES  |     | NULL    |       |
+| nickname    | varchar(10) | YES  |     | NULL    |       |
+| address     | varchar(50) | YES  |     | NULL    |       |
+| city        | varchar(30) | YES  |     | NULL    |       |
+| postalCode  | int(6)      | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+6 rows in set (0.02 sec)
+
+MariaDB [csd2204w18]> select * from customers;
++-------------+-----------------+----------+----------------------------+------------+------------+
+| customersID | name            | nickname | address                    | city       | postalCode |
++-------------+-----------------+----------+----------------------------+------------+------------+
+|           1 | Ashley          | Ash      | 32 Washington street       | WDC        |     321300 |
+|           2 | Bob marley      | Bm       | Keele Street               | Toronto    |     100100 |
+|           3 | Cherlies Theron | Cher     | 329 Empire state Buildiong | New York   |     120134 |
+|           4 | Denial Jack     | DJ       | Spartan Building. East     | Brazil     |     341020 |
+|           5 | Donna newman    | New      | 250 Carlson blvd           | Toronto    |     130120 |
+|           6 | Eston M.        | M,       | 21 York. DV.               | Toronto    |     201023 |
+|           7 | Bobby Chacko    | Chac     | Kennedy                    | New York   |     320300 |
+|           8 | Ashko Charles   | AK       | Washington D.C.            | USA        |     421044 |
+|           9 | Tony Special    | Specie   | Oakville                   | GTA        |     418921 |
+|          10 | Jack Sp         | Sparrow  | Oaster village             | New Jersey |     102301 |
++-------------+-----------------+----------+----------------------------+------------+------------+
+10 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers where name LIKE "%n;
+    "> ;
+    "> ";
+Empty set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers where name LIKE "%n";
++-------------+-----------------+----------+----------------------------+----------+------------+
+| customersID | name            | nickname | address                    | city     | postalCode |
++-------------+-----------------+----------+----------------------------+----------+------------+
+|           3 | Cherlies Theron | Cher     | 329 Empire state Buildiong | New York |     120134 |
+|           5 | Donna newman    | New      | 250 Carlson blvd           | Toronto  |     130120 |
++-------------+-----------------+----------+----------------------------+----------+------------+
+2 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers where customersID NOT BETWEEN 4 AND 7;
++-------------+-----------------+----------+----------------------------+------------+------------+
+| customersID | name            | nickname | address                    | city       | postalCode |
++-------------+-----------------+----------+----------------------------+------------+------------+
+|           1 | Ashley          | Ash      | 32 Washington street       | WDC        |     321300 |
+|           2 | Bob marley      | Bm       | Keele Street               | Toronto    |     100100 |
+|           3 | Cherlies Theron | Cher     | 329 Empire state Buildiong | New York   |     120134 |
+|           8 | Ashko Charles   | AK       | Washington D.C.            | USA        |     421044 |
+|           9 | Tony Special    | Specie   | Oakville                   | GTA        |     418921 |
+|          10 | Jack Sp         | Sparrow  | Oaster village             | New Jersey |     102301 |
++-------------+-----------------+----------+----------------------------+------------+------------+
+6 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers where nickname NOT IN (Bm, AK, Sparrow);
+ERROR 1054 (42S22): Unknown column 'Bm' in 'where clause'
+MariaDB [csd2204w18]> select * from customers where nickname NOT IN ('Bm', 'AK', 'Sparrow');
++-------------+-----------------+----------+----------------------------+----------+------------+
+| customersID | name            | nickname | address                    | city     | postalCode |
++-------------+-----------------+----------+----------------------------+----------+------------+
+|           1 | Ashley          | Ash      | 32 Washington street       | WDC      |     321300 |
+|           3 | Cherlies Theron | Cher     | 329 Empire state Buildiong | New York |     120134 |
+|           4 | Denial Jack     | DJ       | Spartan Building. East     | Brazil   |     341020 |
+|           5 | Donna newman    | New      | 250 Carlson blvd           | Toronto  |     130120 |
+|           6 | Eston M.        | M,       | 21 York. DV.               | Toronto  |     201023 |
+|           7 | Bobby Chacko    | Chac     | Kennedy                    | New York |     320300 |
+|           9 | Tony Special    | Specie   | Oakville                   | GTA      |     418921 |
++-------------+-----------------+----------+----------------------------+----------+------------+
+7 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select customersID, name, nickname from customers where nickname NOT IN (Bm, AK, Sparrow);
+ERROR 1054 (42S22): Unknown column 'Bm' in 'where clause'
+MariaDB [csd2204w18]> select customersID, name, nickname from customers where nickname NOT IN ('Bm', 'AK', 'Sparrow');
++-------------+-----------------+----------+
+| customersID | name            | nickname |
++-------------+-----------------+----------+
+|           1 | Ashley          | Ash      |
+|           3 | Cherlies Theron | Cher     |
+|           4 | Denial Jack     | DJ       |
+|           5 | Donna newman    | New      |
+|           6 | Eston M.        | M,       |
+|           7 | Bobby Chacko    | Chac     |
+|           9 | Tony Special    | Specie   |
++-------------+-----------------+----------+
+7 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select customersID, name, city from customers where nickname NOT IN ('Bm', 'AK', 'Sparrow');
++-------------+-----------------+----------+
+| customersID | name            | city     |
++-------------+-----------------+----------+
+|           1 | Ashley          | WDC      |
+|           3 | Cherlies Theron | New York |
+|           4 | Denial Jack     | Brazil   |
+|           5 | Donna newman    | Toronto  |
+|           6 | Eston M.        | Toronto  |
+|           7 | Bobby Chacko    | New York |
+|           9 | Tony Special    | GTA      |
++-------------+-----------------+----------+
+7 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select customersID, name AS "FullName", city from customers where nickname NOT IN ('Bm', 'AK', 'Sparrow');
++-------------+-----------------+----------+
+| customersID | FullName        | city     |
++-------------+-----------------+----------+
+|           1 | Ashley          | WDC      |
+|           3 | Cherlies Theron | New York |
+|           4 | Denial Jack     | Brazil   |
+|           5 | Donna newman    | Toronto  |
+|           6 | Eston M.        | Toronto  |
+|           7 | Bobby Chacko    | New York |
+|           9 | Tony Special    | GTA      |
++-------------+-----------------+----------+
+7 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select count(*) from customers where name like 'A%';
++----------+
+| count(*) |
++----------+
+|        2 |
++----------+
+1 row in set (0.00 sec)
+
+MariaDB [csd2204w18]> select count(*) AS 'Number of people with name starting with A' from customers where name like 'A%';
++--------------------------------------------+
+| Number of people with name starting with A |
++--------------------------------------------+
+|                                          2 |
++--------------------------------------------+
+1 row in set (0.00 sec)
+
+MariaDB [csd2204w18]> select count(*) AS 'Number of people living in Toronto' from customers where city = 'Toronto';
++------------------------------------+
+| Number of people living in Toronto |
++------------------------------------+
+|                                  3 |
++------------------------------------+
+1 row in set (0.00 sec)
+
+MariaDB [csd2204w18]> select  from customers;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'from customers' at line 1
+MariaDB [csd2204w18]> select DISTINCT(CITY) from customers;
++------------+
+| CITY       |
++------------+
+| WDC        |
+| Toronto    |
+| New York   |
+| Brazil     |
+| USA        |
+| GTA        |
+| New Jersey |
++------------+
+7 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select COUNT(CITY) AS 'Number of customers' DISTINCT(CITY) from customers;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'DISTINCT(CITY) from customers' at line 1
+MariaDB [csd2204w18]> select COUNT(CITY) AS 'Number of customers', DISTINCT(CITY) from customers;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'DISTINCT(CITY) from customers' at line 1
+MariaDB [csd2204w18]> select COUNT(DISTINCT(CITY)) AS 'Number of customers' from customers;
++---------------------+
+| Number of customers |
++---------------------+
+|                   7 |
++---------------------+
+1 row in set (0.00 sec)
+
+MariaDB [csd2204w18]> select COUNT(CITY) AS 'Number of customers', city from customers GROUP BY city;
++---------------------+------------+
+| Number of customers | city       |
++---------------------+------------+
+|                   1 | Brazil     |
+|                   1 | GTA        |
+|                   1 | New Jersey |
+|                   2 | New York   |
+|                   3 | Toronto    |
+|                   1 | USA        |
+|                   1 | WDC        |
++---------------------+------------+
+7 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers order by name;
++-------------+-----------------+----------+----------------------------+------------+------------+
+| customersID | name            | nickname | address                    | city       | postalCode |
++-------------+-----------------+----------+----------------------------+------------+------------+
+|           8 | Ashko Charles   | AK       | Washington D.C.            | USA        |     421044 |
+|           1 | Ashley          | Ash      | 32 Washington street       | WDC        |     321300 |
+|           2 | Bob marley      | Bm       | Keele Street               | Toronto    |     100100 |
+|           7 | Bobby Chacko    | Chac     | Kennedy                    | New York   |     320300 |
+|           3 | Cherlies Theron | Cher     | 329 Empire state Buildiong | New York   |     120134 |
+|           4 | Denial Jack     | DJ       | Spartan Building. East     | Brazil     |     341020 |
+|           5 | Donna newman    | New      | 250 Carlson blvd           | Toronto    |     130120 |
+|           6 | Eston M.        | M,       | 21 York. DV.               | Toronto    |     201023 |
+|          10 | Jack Sp         | Sparrow  | Oaster village             | New Jersey |     102301 |
+|           9 | Tony Special    | Specie   | Oakville                   | GTA        |     418921 |
++-------------+-----------------+----------+----------------------------+------------+------------+
+10 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers order by name desc;
++-------------+-----------------+----------+----------------------------+------------+------------+
+| customersID | name            | nickname | address                    | city       | postalCode |
++-------------+-----------------+----------+----------------------------+------------+------------+
+|           9 | Tony Special    | Specie   | Oakville                   | GTA        |     418921 |
+|          10 | Jack Sp         | Sparrow  | Oaster village             | New Jersey |     102301 |
+|           6 | Eston M.        | M,       | 21 York. DV.               | Toronto    |     201023 |
+|           5 | Donna newman    | New      | 250 Carlson blvd           | Toronto    |     130120 |
+|           4 | Denial Jack     | DJ       | Spartan Building. East     | Brazil     |     341020 |
+|           3 | Cherlies Theron | Cher     | 329 Empire state Buildiong | New York   |     120134 |
+|           7 | Bobby Chacko    | Chac     | Kennedy                    | New York   |     320300 |
+|           2 | Bob marley      | Bm       | Keele Street               | Toronto    |     100100 |
+|           1 | Ashley          | Ash      | 32 Washington street       | WDC        |     321300 |
+|           8 | Ashko Charles   | AK       | Washington D.C.            | USA        |     421044 |
++-------------+-----------------+----------+----------------------------+------------+------------+
+10 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers order by name asc;
++-------------+-----------------+----------+----------------------------+------------+------------+
+| customersID | name            | nickname | address                    | city       | postalCode |
++-------------+-----------------+----------+----------------------------+------------+------------+
+|           8 | Ashko Charles   | AK       | Washington D.C.            | USA        |     421044 |
+|           1 | Ashley          | Ash      | 32 Washington street       | WDC        |     321300 |
+|           2 | Bob marley      | Bm       | Keele Street               | Toronto    |     100100 |
+|           7 | Bobby Chacko    | Chac     | Kennedy                    | New York   |     320300 |
+|           3 | Cherlies Theron | Cher     | 329 Empire state Buildiong | New York   |     120134 |
+|           4 | Denial Jack     | DJ       | Spartan Building. East     | Brazil     |     341020 |
+|           5 | Donna newman    | New      | 250 Carlson blvd           | Toronto    |     130120 |
+|           6 | Eston M.        | M,       | 21 York. DV.               | Toronto    |     201023 |
+|          10 | Jack Sp         | Sparrow  | Oaster village             | New Jersey |     102301 |
+|           9 | Tony Special    | Specie   | Oakville                   | GTA        |     418921 |
++-------------+-----------------+----------+----------------------------+------------+------------+
+10 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers order by postalCode;
++-------------+-----------------+----------+----------------------------+------------+------------+
+| customersID | name            | nickname | address                    | city       | postalCode |
++-------------+-----------------+----------+----------------------------+------------+------------+
+|           2 | Bob marley      | Bm       | Keele Street               | Toronto    |     100100 |
+|          10 | Jack Sp         | Sparrow  | Oaster village             | New Jersey |     102301 |
+|           3 | Cherlies Theron | Cher     | 329 Empire state Buildiong | New York   |     120134 |
+|           5 | Donna newman    | New      | 250 Carlson blvd           | Toronto    |     130120 |
+|           6 | Eston M.        | M,       | 21 York. DV.               | Toronto    |     201023 |
+|           7 | Bobby Chacko    | Chac     | Kennedy                    | New York   |     320300 |
+|           1 | Ashley          | Ash      | 32 Washington street       | WDC        |     321300 |
+|           4 | Denial Jack     | DJ       | Spartan Building. East     | Brazil     |     341020 |
+|           9 | Tony Special    | Specie   | Oakville                   | GTA        |     418921 |
+|           8 | Ashko Charles   | AK       | Washington D.C.            | USA        |     421044 |
++-------------+-----------------+----------+----------------------------+------------+------------+
+10 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers order by city;
++-------------+-----------------+----------+----------------------------+------------+------------+
+| customersID | name            | nickname | address                    | city       | postalCode |
++-------------+-----------------+----------+----------------------------+------------+------------+
+|           4 | Denial Jack     | DJ       | Spartan Building. East     | Brazil     |     341020 |
+|           9 | Tony Special    | Specie   | Oakville                   | GTA        |     418921 |
+|          10 | Jack Sp         | Sparrow  | Oaster village             | New Jersey |     102301 |
+|           3 | Cherlies Theron | Cher     | 329 Empire state Buildiong | New York   |     120134 |
+|           7 | Bobby Chacko    | Chac     | Kennedy                    | New York   |     320300 |
+|           6 | Eston M.        | M,       | 21 York. DV.               | Toronto    |     201023 |
+|           5 | Donna newman    | New      | 250 Carlson blvd           | Toronto    |     130120 |
+|           2 | Bob marley      | Bm       | Keele Street               | Toronto    |     100100 |
+|           8 | Ashko Charles   | AK       | Washington D.C.            | USA        |     421044 |
+|           1 | Ashley          | Ash      | 32 Washington street       | WDC        |     321300 |
++-------------+-----------------+----------+----------------------------+------------+------------+
+10 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers order by city AND postalCode;
++-------------+-----------------+----------+----------------------------+------------+------------+
+| customersID | name            | nickname | address                    | city       | postalCode |
++-------------+-----------------+----------+----------------------------+------------+------------+
+|           1 | Ashley          | Ash      | 32 Washington street       | WDC        |     321300 |
+|           9 | Tony Special    | Specie   | Oakville                   | GTA        |     418921 |
+|           8 | Ashko Charles   | AK       | Washington D.C.            | USA        |     421044 |
+|           7 | Bobby Chacko    | Chac     | Kennedy                    | New York   |     320300 |
+|           6 | Eston M.        | M,       | 21 York. DV.               | Toronto    |     201023 |
+|           5 | Donna newman    | New      | 250 Carlson blvd           | Toronto    |     130120 |
+|           4 | Denial Jack     | DJ       | Spartan Building. East     | Brazil     |     341020 |
+|           3 | Cherlies Theron | Cher     | 329 Empire state Buildiong | New York   |     120134 |
+|           2 | Bob marley      | Bm       | Keele Street               | Toronto    |     100100 |
+|          10 | Jack Sp         | Sparrow  | Oaster village             | New Jersey |     102301 |
++-------------+-----------------+----------+----------------------------+------------+------------+
+10 rows in set, 10 warnings (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers order by city, postalCode;
++-------------+-----------------+----------+----------------------------+------------+------------+
+| customersID | name            | nickname | address                    | city       | postalCode |
++-------------+-----------------+----------+----------------------------+------------+------------+
+|           4 | Denial Jack     | DJ       | Spartan Building. East     | Brazil     |     341020 |
+|           9 | Tony Special    | Specie   | Oakville                   | GTA        |     418921 |
+|          10 | Jack Sp         | Sparrow  | Oaster village             | New Jersey |     102301 |
+|           3 | Cherlies Theron | Cher     | 329 Empire state Buildiong | New York   |     120134 |
+|           7 | Bobby Chacko    | Chac     | Kennedy                    | New York   |     320300 |
+|           2 | Bob marley      | Bm       | Keele Street               | Toronto    |     100100 |
+|           5 | Donna newman    | New      | 250 Carlson blvd           | Toronto    |     130120 |
+|           6 | Eston M.        | M,       | 21 York. DV.               | Toronto    |     201023 |
+|           8 | Ashko Charles   | AK       | Washington D.C.            | USA        |     421044 |
+|           1 | Ashley          | Ash      | 32 Washington street       | WDC        |     321300 |
++-------------+-----------------+----------+----------------------------+------------+------------+
+10 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers order by city ASC AND postalCode DESC;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND postalCode DESC' at line 1
+MariaDB [csd2204w18]> select * from customers order by city ASC postalCode DESC;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'postalCode DESC' at line 1
+MariaDB [csd2204w18]> select * from customers order by city ASC, postalCode DESC;
++-------------+-----------------+----------+----------------------------+------------+------------+
+| customersID | name            | nickname | address                    | city       | postalCode |
++-------------+-----------------+----------+----------------------------+------------+------------+
+|           4 | Denial Jack     | DJ       | Spartan Building. East     | Brazil     |     341020 |
+|           9 | Tony Special    | Specie   | Oakville                   | GTA        |     418921 |
+|          10 | Jack Sp         | Sparrow  | Oaster village             | New Jersey |     102301 |
+|           7 | Bobby Chacko    | Chac     | Kennedy                    | New York   |     320300 |
+|           3 | Cherlies Theron | Cher     | 329 Empire state Buildiong | New York   |     120134 |
+|           6 | Eston M.        | M,       | 21 York. DV.               | Toronto    |     201023 |
+|           5 | Donna newman    | New      | 250 Carlson blvd           | Toronto    |     130120 |
+|           2 | Bob marley      | Bm       | Keele Street               | Toronto    |     100100 |
+|           8 | Ashko Charles   | AK       | Washington D.C.            | USA        |     421044 |
+|           1 | Ashley          | Ash      | 32 Washington street       | WDC        |     321300 |
++-------------+-----------------+----------+----------------------------+------------+------------+
+10 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers order by customersID DESC, name ASC, city DESC;
++-------------+-----------------+----------+----------------------------+------------+------------+
+| customersID | name            | nickname | address                    | city       | postalCode |
++-------------+-----------------+----------+----------------------------+------------+------------+
+|          10 | Jack Sp         | Sparrow  | Oaster village             | New Jersey |     102301 |
+|           9 | Tony Special    | Specie   | Oakville                   | GTA        |     418921 |
+|           8 | Ashko Charles   | AK       | Washington D.C.            | USA        |     421044 |
+|           7 | Bobby Chacko    | Chac     | Kennedy                    | New York   |     320300 |
+|           6 | Eston M.        | M,       | 21 York. DV.               | Toronto    |     201023 |
+|           5 | Donna newman    | New      | 250 Carlson blvd           | Toronto    |     130120 |
+|           4 | Denial Jack     | DJ       | Spartan Building. East     | Brazil     |     341020 |
+|           3 | Cherlies Theron | Cher     | 329 Empire state Buildiong | New York   |     120134 |
+|           2 | Bob marley      | Bm       | Keele Street               | Toronto    |     100100 |
+|           1 | Ashley          | Ash      | 32 Washington street       | WDC        |     321300 |
++-------------+-----------------+----------+----------------------------+------------+------------+
+10 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers group by city WHERE name LIKE 'D%';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'WHERE name LIKE 'D%'' at line 1
+MariaDB [csd2204w18]> select * from customers WHERE name LIKE 'D%' group by city;
++-------------+--------------+----------+------------------------+---------+------------+
+| customersID | name         | nickname | address                | city    | postalCode |
++-------------+--------------+----------+------------------------+---------+------------+
+|           4 | Denial Jack  | DJ       | Spartan Building. East | Brazil  |     341020 |
+|           5 | Donna newman | New      | 250 Carlson blvd       | Toronto |     130120 |
++-------------+--------------+----------+------------------------+---------+------------+
+2 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select min(postalCode) from customers;
++-----------------+
+| min(postalCode) |
++-----------------+
+|          100100 |
++-----------------+
+1 row in set (0.00 sec)
+
+MariaDB [csd2204w18]> select max(postalCode) from customers;
++-----------------+
+| max(postalCode) |
++-----------------+
+|          421044 |
++-----------------+
+1 row in set (0.00 sec)
+
+MariaDB [csd2204w18]> select sum(postalCode) from customers;
++-----------------+
+| sum(postalCode) |
++-----------------+
+|         2476263 |
++-----------------+
+1 row in set (0.00 sec)
+
+MariaDB [csd2204w18]> select average(postalCode) from customers;
+ERROR 1305 (42000): FUNCTION csd2204w18.average does not exist
+MariaDB [csd2204w18]> select avg(postalCode) from customers;
++-----------------+
+| avg(postalCode) |
++-----------------+
+|     247626.3000 |
++-----------------+
+1 row in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers group by name like 'a%';
++-------------+------------+----------+----------------------+---------+------------+
+| customersID | name       | nickname | address              | city    | postalCode |
++-------------+------------+----------+----------------------+---------+------------+
+|           2 | Bob marley | Bm       | Keele Street         | Toronto |     100100 |
+|           1 | Ashley     | Ash      | 32 Washington street | WDC     |     321300 |
++-------------+------------+----------+----------------------+---------+------------+
+2 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers where name like 'a%';
++-------------+---------------+----------+----------------------+------+------------+
+| customersID | name          | nickname | address              | city | postalCode |
++-------------+---------------+----------+----------------------+------+------------+
+|           1 | Ashley        | Ash      | 32 Washington street | WDC  |     321300 |
+|           8 | Ashko Charles | AK       | Washington D.C.      | USA  |     421044 |
++-------------+---------------+----------+----------------------+------+------------+
+2 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers where name  IN (like 'a%', like 'd%');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'like 'a%', like 'd%')' at line 1
+MariaDB [csd2204w18]> select * from customers where name  like in ('a%', 'd%');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'in ('a%', 'd%')' at line 1
+MariaDB [csd2204w18]> select * from customers where name like 'a%' OR name like 'd%';
++-------------+---------------+----------+------------------------+---------+------------+
+| customersID | name          | nickname | address                | city    | postalCode |
++-------------+---------------+----------+------------------------+---------+------------+
+|           1 | Ashley        | Ash      | 32 Washington street   | WDC     |     321300 |
+|           4 | Denial Jack   | DJ       | Spartan Building. East | Brazil  |     341020 |
+|           5 | Donna newman  | New      | 250 Carlson blvd       | Toronto |     130120 |
+|           8 | Ashko Charles | AK       | Washington D.C.        | USA     |     421044 |
++-------------+---------------+----------+------------------------+---------+------------+
+4 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select COUNT(CITY) AS 'Number of customers', city from customers GROUP BY city;
++---------------------+------------+
+| Number of customers | city       |
++---------------------+------------+
+|                   1 | Brazil     |
+|                   1 | GTA        |
+|                   1 | New Jersey |
+|                   2 | New York   |
+|                   3 | Toronto    |
+|                   1 | USA        |
+|                   1 | WDC        |
++---------------------+------------+
+7 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select a.city, a.Total
+    -> from
+    -> ( SELECT distinct city,
+    -> (select sum(city)
+    -> from customers I2
+    -> Where I2.city = I1.city) Total
+    -> FROM customers I1
+    -> ) A;
++------------+-------+
+| city       | Total |
++------------+-------+
+| WDC        |     0 |
+| Toronto    |     0 |
+| New York   |     0 |
+| Brazil     |     0 |
+| USA        |     0 |
+| GTA        |     0 |
+| New Jersey |     0 |
++------------+-------+
+7 rows in set, 10 warnings (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers LIMIT 5;
++-------------+-----------------+----------+----------------------------+----------+------------+
+| customersID | name            | nickname | address                    | city     | postalCode |
++-------------+-----------------+----------+----------------------------+----------+------------+
+|           1 | Ashley          | Ash      | 32 Washington street       | WDC      |     321300 |
+|           2 | Bob marley      | Bm       | Keele Street               | Toronto  |     100100 |
+|           3 | Cherlies Theron | Cher     | 329 Empire state Buildiong | New York |     120134 |
+|           4 | Denial Jack     | DJ       | Spartan Building. East     | Brazil   |     341020 |
+|           5 | Donna newman    | New      | 250 Carlson blvd           | Toronto  |     130120 |
++-------------+-----------------+----------+----------------------------+----------+------------+
+5 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers LIMIT (0,5);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '(0,5)' at line 1
+MariaDB [csd2204w18]> select * from customers LIMIT -5;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '-5' at line 1
+MariaDB [csd2204w18]> select * from customers LIMIT 0,5;
++-------------+-----------------+----------+----------------------------+----------+------------+
+| customersID | name            | nickname | address                    | city     | postalCode |
++-------------+-----------------+----------+----------------------------+----------+------------+
+|           1 | Ashley          | Ash      | 32 Washington street       | WDC      |     321300 |
+|           2 | Bob marley      | Bm       | Keele Street               | Toronto  |     100100 |
+|           3 | Cherlies Theron | Cher     | 329 Empire state Buildiong | New York |     120134 |
+|           4 | Denial Jack     | DJ       | Spartan Building. East     | Brazil   |     341020 |
+|           5 | Donna newman    | New      | 250 Carlson blvd           | Toronto  |     130120 |
++-------------+-----------------+----------+----------------------------+----------+------------+
+5 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers LIMIT 5,0;
+Empty set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers LIMIT 0, -5;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '-5' at line 1
+MariaDB [csd2204w18]> select * from customers ORDER BY customersID DESC LIMIT 5;
++-------------+---------------+----------+-----------------+------------+------------+
+| customersID | name          | nickname | address         | city       | postalCode |
++-------------+---------------+----------+-----------------+------------+------------+
+|          10 | Jack Sp       | Sparrow  | Oaster village  | New Jersey |     102301 |
+|           9 | Tony Special  | Specie   | Oakville        | GTA        |     418921 |
+|           8 | Ashko Charles | AK       | Washington D.C. | USA        |     421044 |
+|           7 | Bobby Chacko  | Chac     | Kennedy         | New York   |     320300 |
+|           6 | Eston M.      | M,       | 21 York. DV.    | Toronto    |     201023 |
++-------------+---------------+----------+-----------------+------------+------------+
+5 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers ORDER BY customersID DESC LIMIT 5 ORDER BY customersID;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'ORDER BY customersID' at line 1
+MariaDB [csd2204w18]> select * from customers ORDER BY customersID DESC LIMIT 5) ORDER BY customersID;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') ORDER BY customersID' at line 1
+MariaDB [csd2204w18]> select * from customers (ORDER BY customersID DESC LIMIT 5) ORDER BY customersID;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '(ORDER BY customersID DESC LIMIT 5) ORDER BY customersID' at line 1
+MariaDB [csd2204w18]> (select * from customers ORDER BY customersID DESC LIMIT 5) ORDER BY customersID;
++-------------+---------------+----------+-----------------+------------+------------+
+| customersID | name          | nickname | address         | city       | postalCode |
++-------------+---------------+----------+-----------------+------------+------------+
+|           6 | Eston M.      | M,       | 21 York. DV.    | Toronto    |     201023 |
+|           7 | Bobby Chacko  | Chac     | Kennedy         | New York   |     320300 |
+|           8 | Ashko Charles | AK       | Washington D.C. | USA        |     421044 |
+|           9 | Tony Special  | Specie   | Oakville        | GTA        |     418921 |
+|          10 | Jack Sp       | Sparrow  | Oaster village  | New Jersey |     102301 |
++-------------+---------------+----------+-----------------+------------+------------+
+5 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from (select * from customers ORDER BY customersID DESC LIMIT 5) J1 ORDER BY customersID;
++-------------+---------------+----------+-----------------+------------+------------+
+| customersID | name          | nickname | address         | city       | postalCode |
++-------------+---------------+----------+-----------------+------------+------------+
+|           6 | Eston M.      | M,       | 21 York. DV.    | Toronto    |     201023 |
+|           7 | Bobby Chacko  | Chac     | Kennedy         | New York   |     320300 |
+|           8 | Ashko Charles | AK       | Washington D.C. | USA        |     421044 |
+|           9 | Tony Special  | Specie   | Oakville        | GTA        |     418921 |
+|          10 | Jack Sp       | Sparrow  | Oaster village  | New Jersey |     102301 |
++-------------+---------------+----------+-----------------+------------+------------+
+5 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> INSERT INTO customers (customersID, name) VALUES(11, 'Keshav');
+Query OK, 1 row affected (0.05 sec)
+
+MariaDB [csd2204w18]> select * from customers;
++-------------+-----------------+----------+----------------------------+------------+------------+
+| customersID | name            | nickname | address                    | city       | postalCode |
++-------------+-----------------+----------+----------------------------+------------+------------+
+|           1 | Ashley          | Ash      | 32 Washington street       | WDC        |     321300 |
+|           2 | Bob marley      | Bm       | Keele Street               | Toronto    |     100100 |
+|           3 | Cherlies Theron | Cher     | 329 Empire state Buildiong | New York   |     120134 |
+|           4 | Denial Jack     | DJ       | Spartan Building. East     | Brazil     |     341020 |
+|           5 | Donna newman    | New      | 250 Carlson blvd           | Toronto    |     130120 |
+|           6 | Eston M.        | M,       | 21 York. DV.               | Toronto    |     201023 |
+|           7 | Bobby Chacko    | Chac     | Kennedy                    | New York   |     320300 |
+|           8 | Ashko Charles   | AK       | Washington D.C.            | USA        |     421044 |
+|           9 | Tony Special    | Specie   | Oakville                   | GTA        |     418921 |
+|          10 | Jack Sp         | Sparrow  | Oaster village             | New Jersey |     102301 |
+|          11 | Keshav          | NULL     | NULL                       | NULL       |       NULL |
++-------------+-----------------+----------+----------------------------+------------+------------+
+11 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers WHERE nickname is null;
++-------------+--------+----------+---------+------+------------+
+| customersID | name   | nickname | address | city | postalCode |
++-------------+--------+----------+---------+------+------------+
+|          11 | Keshav | NULL     | NULL    | NULL |       NULL |
++-------------+--------+----------+---------+------+------------+
+1 row in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from customers WHERE nickname is not null;
++-------------+-----------------+----------+----------------------------+------------+------------+
+| customersID | name            | nickname | address                    | city       | postalCode |
++-------------+-----------------+----------+----------------------------+------------+------------+
+|           1 | Ashley          | Ash      | 32 Washington street       | WDC        |     321300 |
+|           2 | Bob marley      | Bm       | Keele Street               | Toronto    |     100100 |
+|           3 | Cherlies Theron | Cher     | 329 Empire state Buildiong | New York   |     120134 |
+|           4 | Denial Jack     | DJ       | Spartan Building. East     | Brazil     |     341020 |
+|           5 | Donna newman    | New      | 250 Carlson blvd           | Toronto    |     130120 |
+|           6 | Eston M.        | M,       | 21 York. DV.               | Toronto    |     201023 |
+|           7 | Bobby Chacko    | Chac     | Kennedy                    | New York   |     320300 |
+|           8 | Ashko Charles   | AK       | Washington D.C.            | USA        |     421044 |
+|           9 | Tony Special    | Specie   | Oakville                   | GTA        |     418921 |
+|          10 | Jack Sp         | Sparrow  | Oaster village             | New Jersey |     102301 |
++-------------+-----------------+----------+----------------------------+------------+------------+
+10 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> exit;
+Bye
+
+731573@128-IMAC08 c:\xampp
+# mysqldump -u root -p csd2204w18 > Day4.sql
+Enter password:
+
+731573@128-IMAC08 c:\xampp
+#

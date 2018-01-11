@@ -1,0 +1,45 @@
+Task Details: Use the following query without GROUP BY clause
+
+Problem task: select city, COUNT(CITY) AS 'Total' from customers GROUP BY city; 
+
+Expected Solution : 
++------------+-------+
+| city       | Total |
++------------+-------+
+| WDC        |     1 |
+| Toronto    |     3 |
+| New York   |     2 |
+| Brazil     |     1 |
+| USA        |     1 |
+| GTA        |     1 |
+| New Jersey |     1 |
+| NULL       |     0 |
++------------+-------+
+
+ANSWER:
+Query: 
+SELECT A.city, A.Total
+FROM
+( SELECT DISTINCT city,
+(SELECT COUNT(CITY)
+FROM customers I2
+WHERE I2.city = I1.city) Total
+FROM customers I1
+) A;
+
+RESULT:
+
++------------+-------+
+| city       | Total |
++------------+-------+
+| WDC        |     1 |
+| Toronto    |     3 |
+| New York   |     2 |
+| Brazil     |     1 |
+| USA        |     1 |
+| GTA        |     1 |
+| New Jersey |     1 |
+| NULL       |     0 |
++------------+-------+
+
+
