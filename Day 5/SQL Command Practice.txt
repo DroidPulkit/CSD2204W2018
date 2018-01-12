@@ -1,0 +1,451 @@
+
+Setting environment for using XAMPP for Windows.
+731573@128-IMAC08 c:\xampp
+# mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 32
+Server version: 10.1.21-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2016, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| csd2204w18         |
+| information_schema |
+| mysql              |
+| performance_schema |
+| phpmyadmin         |
+| test               |
++--------------------+
+6 rows in set (0.00 sec)
+
+MariaDB [(none)]> use csd2204w18
+Database changed
+MariaDB [csd2204w18]> create table CityMaster (
+    -> City;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 2
+MariaDB [csd2204w18]> create table CityMaster (
+    -> CityID integer(4) primary key,
+    -> cityName varchar(255) default 'toronto’
+    -> );
+Query OK, 0 rows affected (0.23 sec)
+
+MariaDB [csd2204w18]> create table persons(
+    -> ID integer(3),
+    -> LasteName varchar(255) NOT NULL,
+    -> FirstName Varchar(255),
+    -> Age integer(3),
+    -> CityID integer(4),
+    -> constraint pk_persons primary key (ID),
+    -> constraint ck_persons check (age>=18),
+    -> constraint fk_persons foreign key (CityID)
+    -> references CityMaster (CityID)
+    -> );
+Query OK, 0 rows affected (0.40 sec)
+
+MariaDB [csd2204w18]> show tables;
++----------------------+
+| Tables_in_csd2204w18 |
++----------------------+
+| citymaster           |
+| customers            |
+| persons              |
++----------------------+
+3 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> show index from customers;
++-----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Table     | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++-----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| customers |          0 | PRIMARY  |            1 | customersID | A         |          11 |     NULL | NULL   |      | BTREE      |         |               |
++-----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+1 row in set (0.00 sec)
+
+MariaDB [csd2204w18]> show index from persons;
++---------+------------+------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Table   | Non_unique | Key_name   | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++---------+------------+------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| persons |          0 | PRIMARY    |            1 | ID          | A         |           0 |     NULL | NULL   |      | BTREE      |         |               |
+| persons |          1 | fk_persons |            1 | CityID      | A         |           0 |     NULL | NULL   | YES  | BTREE      |         |               |
++---------+------------+------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+2 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> show index from cityMaster;
++------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Table      | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| citymaster |          0 | PRIMARY  |            1 | CityID      | A         |           0 |     NULL | NULL   |      | BTREE      |         |               |
++------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+1 row in set (0.00 sec)
+
+MariaDB [csd2204w18]> create table c1 AS select * from customers;
+Query OK, 11 rows affected (0.36 sec)
+Records: 11  Duplicates: 0  Warnings: 0
+
+MariaDB [csd2204w18]> show tables;
++----------------------+
+| Tables_in_csd2204w18 |
++----------------------+
+| c1                   |
+| citymaster           |
+| customers            |
+| persons              |
++----------------------+
+4 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> desc c1'
+    '> ;
+    '> ;
+    '> ';
+Empty set (0.00 sec)
+
+MariaDB [csd2204w18]> desc c1;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| customersID | int(2)      | NO   |     | NULL    |       |
+| name        | varchar(40) | YES  |     | NULL    |       |
+| nickname    | varchar(10) | YES  |     | NULL    |       |
+| address     | varchar(50) | YES  |     | NULL    |       |
+| city        | varchar(30) | YES  |     | NULL    |       |
+| postalCode  | int(6)      | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> desc customers;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| customersID | int(2)      | NO   | PRI | NULL    |       |
+| name        | varchar(40) | YES  |     | NULL    |       |
+| nickname    | varchar(10) | YES  |     | NULL    |       |
+| address     | varchar(50) | YES  |     | NULL    |       |
+| city        | varchar(30) | YES  |     | NULL    |       |
+| postalCode  | int(6)      | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> create table c2 LIKE customers;
+Query OK, 0 rows affected (0.34 sec)
+
+MariaDB [csd2204w18]> select * from customers;
++-------------+-----------------+----------+----------------------------+------------+------------+
+| customersID | name            | nickname | address                    | city       | postalCode |
++-------------+-----------------+----------+----------------------------+------------+------------+
+|           1 | Ashley          | Ash      | 32 Washington street       | WDC        |     321300 |
+|           2 | Bob marley      | Bm       | Keele Street               | Toronto    |     100100 |
+|           3 | Cherlies Theron | Cher     | 329 Empire state Buildiong | New York   |     120134 |
+|           4 | Denial Jack     | DJ       | Spartan Building. East     | Brazil     |     341020 |
+|           5 | Donna newman    | New      | 250 Carlson blvd           | Toronto    |     130120 |
+|           6 | Eston M.        | M,       | 21 York. DV.               | Toronto    |     201023 |
+|           7 | Bobby Chacko    | Chac     | Kennedy                    | New York   |     320300 |
+|           8 | Ashko Charles   | AK       | Washington D.C.            | USA        |     421044 |
+|           9 | Tony Special    | Specie   | Oakville                   | GTA        |     418921 |
+|          10 | Jack Sp         | Sparrow  | Oaster village             | New Jersey |     102301 |
+|          11 | Keshav          | NULL     | NULL                       | NULL       |       NULL |
++-------------+-----------------+----------+----------------------------+------------+------------+
+11 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from c2;
+Empty set (0.00 sec)
+
+MariaDB [csd2204w18]> drop table c2;
+Query OK, 0 rows affected (0.12 sec)
+
+MariaDB [csd2204w18]> show tables;
++----------------------+
+| Tables_in_csd2204w18 |
++----------------------+
+| c1                   |
+| citymaster           |
+| customers            |
+| persons              |
++----------------------+
+4 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> create table c2 AS customers;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'customers' at line 1
+MariaDB [csd2204w18]> create table c2 LIKE customers;
+Query OK, 0 rows affected (0.30 sec)
+
+MariaDB [csd2204w18]> desc customers;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| customersID | int(2)      | NO   | PRI | NULL    |       |
+| name        | varchar(40) | YES  |     | NULL    |       |
+| nickname    | varchar(10) | YES  |     | NULL    |       |
+| address     | varchar(50) | YES  |     | NULL    |       |
+| city        | varchar(30) | YES  |     | NULL    |       |
+| postalCode  | int(6)      | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select * from c2;
+Empty set (0.00 sec)
+
+MariaDB [csd2204w18]> insert into c2 select * from customers;
+Query OK, 11 rows affected (0.06 sec)
+Records: 11  Duplicates: 0  Warnings: 0
+
+MariaDB [csd2204w18]> select * from c2;
++-------------+-----------------+----------+----------------------------+------------+------------+
+| customersID | name            | nickname | address                    | city       | postalCode |
++-------------+-----------------+----------+----------------------------+------------+------------+
+|           1 | Ashley          | Ash      | 32 Washington street       | WDC        |     321300 |
+|           2 | Bob marley      | Bm       | Keele Street               | Toronto    |     100100 |
+|           3 | Cherlies Theron | Cher     | 329 Empire state Buildiong | New York   |     120134 |
+|           4 | Denial Jack     | DJ       | Spartan Building. East     | Brazil     |     341020 |
+|           5 | Donna newman    | New      | 250 Carlson blvd           | Toronto    |     130120 |
+|           6 | Eston M.        | M,       | 21 York. DV.               | Toronto    |     201023 |
+|           7 | Bobby Chacko    | Chac     | Kennedy                    | New York   |     320300 |
+|           8 | Ashko Charles   | AK       | Washington D.C.            | USA        |     421044 |
+|           9 | Tony Special    | Specie   | Oakville                   | GTA        |     418921 |
+|          10 | Jack Sp         | Sparrow  | Oaster village             | New Jersey |     102301 |
+|          11 | Keshav          | NULL     | NULL                       | NULL       |       NULL |
++-------------+-----------------+----------+----------------------------+------------+------------+
+11 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> CREATE TABLE c3 LIKE customers;
+Query OK, 0 rows affected (0.24 sec)
+
+MariaDB [csd2204w18]> Insert into c3 select * from customers where customersID > 5;
+Query OK, 6 rows affected (0.08 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+MariaDB [csd2204w18]> CREATE TABLE c4 LIKE customers;
+Query OK, 0 rows affected (0.55 sec)
+
+MariaDB [csd2204w18]> Insert into c3 select * from customers where city = "Toronto";
+ERROR 1062 (23000): Duplicate entry '6' for key 'PRIMARY'
+MariaDB [csd2204w18]> Insert into c4 select * from customers where city = "Toronto";
+Query OK, 3 rows affected (0.05 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+MariaDB [csd2204w18]> CREATE TABLE c5 LIKE customers;
+Query OK, 0 rows affected (0.35 sec)
+
+MariaDB [csd2204w18]> Insert into c5 select * from customers where city LIKE 'New%';
+Query OK, 3 rows affected (0.06 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+MariaDB [csd2204w18]> INSERT INTO CITYMASTER VALUES (1, Toronto);
+ERROR 1054 (42S22): Unknown column 'Toronto' in 'field list'
+MariaDB [csd2204w18]> INSERT INTO CITYMASTER VALUES (1, 'Toronto');
+Query OK, 1 row affected (0.07 sec)
+
+MariaDB [csd2204w18]> INSERT INTO CITYMASTER VALUES (2, 'Waterloo');
+Query OK, 1 row affected (0.06 sec)
+
+MariaDB [csd2204w18]> INSERT INTO persons VALUES (1, 'Kumar', 'Pulkit', 17, 1);
+Query OK, 1 row affected (0.05 sec)
+
+MariaDB [csd2204w18]> INSERT INTO persons VALUES (2, 'Kumar', 'Karan', 20, 1);
+Query OK, 1 row affected (0.07 sec)
+
+MariaDB [csd2204w18]> select * from persons;
++----+-----------+-----------+------+--------+
+| ID | LasteName | FirstName | Age  | CityID |
++----+-----------+-----------+------+--------+
+|  1 | Kumar     | Pulkit    |   17 |      1 |
+|  2 | Kumar     | Karan     |   20 |      1 |
++----+-----------+-----------+------+--------+
+2 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> desc persons;
++-----------+--------------+------+-----+---------+-------+
+| Field     | Type         | Null | Key | Default | Extra |
++-----------+--------------+------+-----+---------+-------+
+| ID        | int(3)       | NO   | PRI | NULL    |       |
+| LasteName | varchar(255) | NO   |     | NULL    |       |
+| FirstName | varchar(255) | YES  |     | NULL    |       |
+| Age       | int(3)       | YES  |     | NULL    |       |
+| CityID    | int(4)       | YES  | MUL | NULL    |       |
++-----------+--------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> select version();
++-----------------+
+| version()       |
++-----------------+
+| 10.1.21-MariaDB |
++-----------------+
+1 row in set (0.00 sec)
+
+MariaDB [csd2204w18]> alter table citymaster add column country varchar(100);
+Query OK, 0 rows affected (0.43 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [csd2204w18]> desc citymaster;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| CityID   | int(4)       | NO   | PRI | NULL    |       |
+| cityName | varchar(255) | YES  |     | toronto |       |
+| country  | varchar(100) | YES  |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> alter table citymaster add column test1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1
+MariaDB [csd2204w18]> alter table citymaster modify column country varchar(20);
+Query OK, 2 rows affected (1.07 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+MariaDB [csd2204w18]> desc citymaster;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| CityID   | int(4)       | NO   | PRI | NULL    |       |
+| cityName | varchar(255) | YES  |     | toronto |       |
+| country  | varchar(20)  | YES  |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> alter table citymaster change column country zipcode varchar(6);
+Query OK, 2 rows affected (1.25 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+MariaDB [csd2204w18]> alter table citymaster drop column zipcode;
+Query OK, 0 rows affected (0.44 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [csd2204w18]> desc citymaster;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| CityID   | int(4)       | NO   | PRI | NULL    |       |
+| cityName | varchar(255) | YES  |     | toronto |       |
++----------+--------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> alter table citymaster add primary key(cityname);
+ERROR 1068 (42000): Multiple primary key defined
+MariaDB [csd2204w18]> create table cityMaster2 AS citymaster;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'citymaster' at line 1
+MariaDB [csd2204w18]> create table cityMaster2 AS select * from citymaster;
+Query OK, 2 rows affected (0.31 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+MariaDB [csd2204w18]> select * from cityMaster2;
++--------+----------+
+| CityID | cityName |
++--------+----------+
+|      1 | Toronto  |
+|      2 | Waterloo |
++--------+----------+
+2 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> desc citymaster2;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| CityID   | int(4)       | NO   |     | NULL    |       |
+| cityName | varchar(255) | YES  |     | toronto |       |
++----------+--------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> alter table cityMaster2 add primary key (cityid);
+Query OK, 0 rows affected (0.88 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [csd2204w18]> alter table cityMaster2 remove primary key (cityid);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'primary key (cityid)' at line 1
+MariaDB [csd2204w18]> alter table cityMaster2 add constraint unique (cityname);
+Query OK, 0 rows affected (0.29 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [csd2204w18]> alter table citymaster2 modify cityname varchar(255) not null;
+Query OK, 2 rows affected (8.30 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+MariaDB [csd2204w18]> desc citymaster2;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| CityID   | int(4)       | NO   | PRI | NULL    |       |
+| cityname | varchar(255) | NO   | UNI | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+2 rows in set (0.18 sec)
+
+MariaDB [csd2204w18]> alter table citymaster2 drop index cityid;
+ERROR 1091 (42000): Can't DROP 'cityid'; check that column/key exists
+MariaDB [csd2204w18]> alter table citymaster2 drop index cityname;
+Query OK, 0 rows affected (0.95 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [csd2204w18]> desc citymaster2;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| CityID   | int(4)       | NO   | PRI | NULL    |       |
+| cityname | varchar(255) | NO   |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+2 rows in set (0.12 sec)
+
+MariaDB [csd2204w18]> update citymaster2 set cityname = 'london' where cityid = 1;
+Query OK, 1 row affected (0.49 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [csd2204w18]> select * from citymaster2;
++--------+----------+
+| CityID | cityname |
++--------+----------+
+|      1 | london   |
+|      2 | Waterloo |
++--------+----------+
+2 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> update citymaster2 set cityname = 'london';
+Query OK, 1 row affected (0.23 sec)
+Rows matched: 2  Changed: 1  Warnings: 0
+
+MariaDB [csd2204w18]> select * from citymaster2;
++--------+----------+
+| CityID | cityname |
++--------+----------+
+|      1 | london   |
+|      2 | london   |
++--------+----------+
+2 rows in set (0.00 sec)
+
+MariaDB [csd2204w18]> delete from citymaster2 where cityid = 2;
+Query OK, 1 row affected (0.50 sec)
+
+MariaDB [csd2204w18]> select * from citymaster2;
++--------+----------+
+| CityID | cityname |
++--------+----------+
+|      1 | london   |
++--------+----------+
+1 row in set (0.00 sec)
+
+MariaDB [csd2204w18]> delete * from citymaster2;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '* from citymaster2' at line 1
+MariaDB [csd2204w18]> delete from citymaster2;
+Query OK, 1 row affected (0.07 sec)
+
+MariaDB [csd2204w18]> drop table citymaster2;
+Query OK, 0 rows affected (0.13 sec)
+
+MariaDB [csd2204w18]> exit;
+Bye
+
+731573@128-IMAC08 c:\xampp
+# mysqldump -u root -p > Day5.sql
+Usage: mysqldump [OPTIONS] database [tables]
+OR     mysqldump [OPTIONS] --databases [OPTIONS] DB1 [DB2 DB3...]
+OR     mysqldump [OPTIONS] --all-databases [OPTIONS]
+For more options, use mysqldump --help
+
+731573@128-IMAC08 c:\xampp
+# mysqldump csd2204w18 -u root -p > Day5.sql
+Enter password:
+
+731573@128-IMAC08 c:\xampp
+#
