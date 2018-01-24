@@ -1,0 +1,61 @@
+Question: Create a stored procedure which takes one value as input and finds the prime number till that number.
+
+Answer :
+
+DELIMETER $$
+
+create table number (number int(10))$$
+
+create procedure primeNumberFinder(IN value int(5))
+	begin
+		
+		DECLARE i int default 1;
+		DECLARE j int default 1;
+		DECLARE modulusCounter int default 0;
+		
+		Truncate table number; 
+		
+		while(j<=value) do
+			while(i<=j) do
+				if(j%i=0) then
+					set modulusCounter = modulusCounter + 1;
+				end if;
+				set i=i+1;
+			end while;
+			if(modulusCounter = 2) then
+				INSERT into number VALUES (j);
+			end if;
+			
+			set i = 1;
+			set j = j + 1;
+			set modulusCounter = 0;
+			
+		end while;
+	end$$
+
+Result:
+
+MariaDB [csd2204w18]> call primeNumberFinder(50)$$
+Query OK, 1 row affected (0.71 sec)
+
+MariaDB [csd2204w18]> select * from number$$
++--------+
+| number |
++--------+
+|      2 |
+|      3 |
+|      5 |
+|      7 |
+|     11 |
+|     13 |
+|     17 |
+|     19 |
+|     23 |
+|     29 |
+|     31 |
+|     37 |
+|     41 |
+|     43 |
+|     47 |
++--------+
+15 rows in set (0.00 sec)
