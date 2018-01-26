@@ -1,0 +1,14 @@
+Question:
+How to create trigger for number less than 10
+
+Query:
+DELIMITER $$  
+CREATE TRIGGER checkNumber BEFORE INSERT ON number 
+FOR EACH ROW  
+BEGIN  
+If new.no < 10
+Then
+Signal sqlstate '45000' set message_text = 'Number less than 10';
+End if;
+End$$
+Delimiter ;

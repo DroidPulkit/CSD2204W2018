@@ -1,0 +1,407 @@
+MariaDB [csd2204w18new]> Create table number (no float(5,2));
+Query OK, 0 rows affected (0.19 sec)
+
+MariaDB [csd2204w18new]> create or replace trigger ins_sum
+    -> before insert on number
+    -> for each row set set @sum = new.no;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'set @sum = new.no' at line 3
+MariaDB [csd2204w18new]> create or replace trigger ins_sum
+    -> before insert on number
+    -> for each row set @sum = new.no;
+Query OK, 0 rows affected (0.13 sec)
+
+MariaDB [csd2204w18new]> insert into number (2);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '2)' at line 1
+MariaDB [csd2204w18new]> insert into number  VALUES(2);
+Query OK, 1 row affected (0.08 sec)
+
+MariaDB [csd2204w18new]> select @sum;
++------+
+| @sum |
++------+
+|    2 |
++------+
+1 row in set (0.05 sec)
+
+MariaDB [csd2204w18new]> insert into number  VALUES(5);
+Query OK, 1 row affected (0.10 sec)
+
+MariaDB [csd2204w18new]> select @sum;
++------+
+| @sum |
++------+
+|    5 |
++------+
+1 row in set (0.00 sec)
+
+MariaDB [csd2204w18new]> desc log_emp_details;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| EMPLOYEE_ID | int(6)      | YES  |     | NULL    |       |
+| SALARY      | double(8,2) | YES  |     | NULL    |       |
+| EDTTIME     | datetime    | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+MariaDB [csd2204w18new]> delimiter $$
+MariaDB [csd2204w18new]> show tables;
+    -> $$
++-------------------------+
+| Tables_in_csd2204w18new |
++-------------------------+
+| emp_details             |
+| log_emp_details         |
+| log_emp_details_update  |
+| number                  |
+| price_logs              |
+| stud_marks              |
+| user_change_logs        |
++-------------------------+
+7 rows in set (0.00 sec)
+
+MariaDB [csd2204w18new]> CREATE
+    -> TRIGGER `csd2204w18`.`emp_details_AINS`
+    -> AFTER INSERT ON `csd2204w18`.`emp_details`
+    -> FOR EACH ROW
+    -> BEGIN
+    -> INSERT INTO log_emp_details VALUES(NEW.employee_id,
+    -> NEW.salary, NOW());
+    -> END$$
+ERROR 1146 (42S02): Table 'csd2204w18.emp_details' doesn't exist
+MariaDB [csd2204w18new]> CREATE
+    -> TRIGGER `csd2204w18New`.`emp_details_AINS`
+    -> AFTER INSERT ON `csd2204w18`.`emp_details`
+    -> FOR EACH ROW
+    -> BEGIN
+    -> INSERT INTO log_emp_details VALUES(NEW.employee_id,
+    -> NEW.salary, NOW());
+    -> END$$
+ERROR 1146 (42S02): Table 'csd2204w18.emp_details' doesn't exist
+MariaDB [csd2204w18new]> CREATE
+    -> TRIGGER `csd2204w18New`.`emp_details_AINS`
+    -> AFTER INSERT ON `csd2204w18New`.`emp_details`
+    -> FOR EACH ROW
+    -> BEGIN
+    -> INSERT INTO log_emp_details VALUES(NEW.employee_id,
+    -> NEW.salary, NOW());
+    -> END$$
+Query OK, 0 rows affected (0.10 sec)
+
+MariaDB [csd2204w18new]> select * from log_emp_details;
+    -> $$
+Empty set (0.00 sec)
+
+MariaDB [csd2204w18new]> select * from emp_details$$
++-------------+------------+-----------+---------------------------+--------------+------------+---------+----------+----------------+
+| EMPLOYEE_ID | FIRST_NAME | LAST_NAME | EMAIL                     | PHONE_NUMBER | HIRE_DATE  | JOB_ID  | SALARY   | COMMISSION_PCT |
++-------------+------------+-----------+---------------------------+--------------+------------+---------+----------+----------------+
+|         100 | STEVEN     | KING      | STEVEN.KING@GMAIL.COM     | 2345678      | 1998-01-14 | AD_PRES | 24000.00 |           0.10 |
+|         101 | NEENA      | KOCHHAR   | NEENA.KOCHHAR@GMAIL.COM   | 2345678      | 2002-10-10 | AD_VP   | 17000.00 |           0.50 |
+|         102 | LEX        | DE HANN   | LEX.HANN@GMAIL.COM        | 2345678      | 1995-10-20 | AD_VP   | 17000.00 |           0.50 |
+|         103 | ALEXANDER  | HUNOLD    | ALEXANDER.HUNOLD@GMAIL.CO | 2345678      | 2002-11-23 | IT_PROG |  9000.00 |           0.25 |
+|         104 | BRUCE      | ERNST     | BRUCE.ERNST@GMAIL.COM     | 2345678      | 2003-08-24 | IT_PROG |  6000.00 |           0.25 |
+|         105 | DAVID      | AUSTIN    | DAVID.AUSTIN@GMAIL.COM    | 2345678      | 2005-04-10 | IT_PROG |  4800.00 |           0.25 |
++-------------+------------+-----------+---------------------------+--------------+------------+---------+----------+----------------+
+6 rows in set (0.00 sec)
+
+MariaDB [csd2204w18new]> show tables;
+    -> $$
++-------------------------+
+| Tables_in_csd2204w18new |
++-------------------------+
+| emp_details             |
+| log_emp_details         |
+| log_emp_details_update  |
+| number                  |
+| price_logs              |
+| stud_marks              |
+| user_change_logs        |
++-------------------------+
+7 rows in set (0.00 sec)
+
+MariaDB [csd2204w18new]> insert into emp_details values(106, 'JK', 'JK', 'JK@jk.com', 123456, NULL, 'INSTRUCTOR', 1200.00, 100);
+    -> $$
+Query OK, 1 row affected, 1 warning (0.10 sec)
+
+MariaDB [csd2204w18new]> select * from emp_details$$
++-------------+------------+-----------+---------------------------+--------------+------------+------------+----------+----------------+
+| EMPLOYEE_ID | FIRST_NAME | LAST_NAME | EMAIL                     | PHONE_NUMBER | HIRE_DATE  | JOB_ID     | SALARY   | COMMISSION_PCT |
++-------------+------------+-----------+---------------------------+--------------+------------+------------+----------+----------------+
+|         100 | STEVEN     | KING      | STEVEN.KING@GMAIL.COM     | 2345678      | 1998-01-14 | AD_PRES    | 24000.00 |           0.10 |
+|         101 | NEENA      | KOCHHAR   | NEENA.KOCHHAR@GMAIL.COM   | 2345678      | 2002-10-10 | AD_VP      | 17000.00 |           0.50 |
+|         102 | LEX        | DE HANN   | LEX.HANN@GMAIL.COM        | 2345678      | 1995-10-20 | AD_VP      | 17000.00 |           0.50 |
+|         103 | ALEXANDER  | HUNOLD    | ALEXANDER.HUNOLD@GMAIL.CO | 2345678      | 2002-11-23 | IT_PROG    |  9000.00 |           0.25 |
+|         104 | BRUCE      | ERNST     | BRUCE.ERNST@GMAIL.COM     | 2345678      | 2003-08-24 | IT_PROG    |  6000.00 |           0.25 |
+|         105 | DAVID      | AUSTIN    | DAVID.AUSTIN@GMAIL.COM    | 2345678      | 2005-04-10 | IT_PROG    |  4800.00 |           0.25 |
+|         106 | JK         | JK        | JK@jk.com                 | 123456       | NULL       | INSTRUCTOR |  1200.00 |           0.99 |
++-------------+------------+-----------+---------------------------+--------------+------------+------------+----------+----------------+
+7 rows in set (0.00 sec)
+
+MariaDB [csd2204w18new]> select * from log_emp_details;
+    -> $$
++-------------+---------+---------------------+
+| EMPLOYEE_ID | SALARY  | EDTTIME             |
++-------------+---------+---------------------+
+|         106 | 1200.00 | 2018-01-24 08:44:28 |
++-------------+---------+---------------------+
+1 row in set (0.00 sec)
+
+MariaDB [csd2204w18new]> create trigger `csd2204w18New`.`number`
+    -> before insert on ``$$
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 2
+MariaDB [csd2204w18new]> create trigger numberCheck
+    -> before insert on number
+    -> for each row
+    -> begin
+    -> if (new.no < 10)
+    -> begin
+    -> return
+    -> end
+    -> insert into number values(new.no);
+    -> END$$
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'begin
+return
+end
+insert into number values(new.no);
+END' at line 6
+MariaDB [csd2204w18new]>  create trigger numberCheck
+    ->     -> before insert on number
+    ->     -> for each row$$
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '-> before insert on number
+    -> for each row' at line 2
+MariaDB [csd2204w18new]> CREATE or REPLACE TRIGGER `emp_details_BINS`
+    -> BEFORE INSERT ON emp_details
+    -> FOR EACH ROW
+    -> BEGIN
+    -> SET NEW.FIRST_NAME = TRIM(NEW.FIRST_NAME);
+    -> SET NEW.LAST_NAME = TRIM(NEW.LAST_NAME);
+    -> SET NEW.JOB_ID = UPPER(NEW.JOB_ID);
+    -> END$$
+Query OK, 0 rows affected (0.10 sec)
+
+MariaDB [csd2204w18new]> insert into emp_details values(107, 'a', 'b', 'ab@gmail.com', NULL,  'DOCTOR', 120000, 10);
+    -> $$
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+MariaDB [csd2204w18new]> insert into emp_details values(108, 'a', 'b', 'ab@gmail.com', NULL,  'DOCTOR', 120000, 10)$$
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+MariaDB [csd2204w18new]> insert into emp_details values(107, 'JK', 'JK', 'JK@jk.com', 123456, NULL, 'INSTRUCTOR', 1200.00, 100);
+    -> $$
+Query OK, 1 row affected, 1 warning (0.33 sec)
+
+MariaDB [csd2204w18new]> select * from emp_details_BINS$$
+ERROR 1146 (42S02): Table 'csd2204w18new.emp_details_bins' doesn't exist
+MariaDB [csd2204w18new]> select * from emp_details$$
++-------------+------------+-----------+---------------------------+--------------+------------+------------+----------+----------------+
+| EMPLOYEE_ID | FIRST_NAME | LAST_NAME | EMAIL                     | PHONE_NUMBER | HIRE_DATE  | JOB_ID     | SALARY   | COMMISSION_PCT |
++-------------+------------+-----------+---------------------------+--------------+------------+------------+----------+----------------+
+|         100 | STEVEN     | KING      | STEVEN.KING@GMAIL.COM     | 2345678      | 1998-01-14 | AD_PRES    | 24000.00 |           0.10 |
+|         101 | NEENA      | KOCHHAR   | NEENA.KOCHHAR@GMAIL.COM   | 2345678      | 2002-10-10 | AD_VP      | 17000.00 |           0.50 |
+|         102 | LEX        | DE HANN   | LEX.HANN@GMAIL.COM        | 2345678      | 1995-10-20 | AD_VP      | 17000.00 |           0.50 |
+|         103 | ALEXANDER  | HUNOLD    | ALEXANDER.HUNOLD@GMAIL.CO | 2345678      | 2002-11-23 | IT_PROG    |  9000.00 |           0.25 |
+|         104 | BRUCE      | ERNST     | BRUCE.ERNST@GMAIL.COM     | 2345678      | 2003-08-24 | IT_PROG    |  6000.00 |           0.25 |
+|         105 | DAVID      | AUSTIN    | DAVID.AUSTIN@GMAIL.COM    | 2345678      | 2005-04-10 | IT_PROG    |  4800.00 |           0.25 |
+|         106 | JK         | JK        | JK@jk.com                 | 123456       | NULL       | INSTRUCTOR |  1200.00 |           0.99 |
+|         107 | JK         | JK        | JK@jk.com                 | 123456       | NULL       | INSTRUCTOR |  1200.00 |           0.99 |
++-------------+------------+-----------+---------------------------+--------------+------------+------------+----------+----------------+
+8 rows in set (0.00 sec)
+
+MariaDB [csd2204w18new]> insert into emp_details values(107, '  JK   ', '   JK  ', 'JK@jk.com', 123456, NULL, 'INSTRuCTOR', 1200.00, 100);
+    -> $$
+ERROR 1062 (23000): Duplicate entry '107' for key 'PRIMARY'
+MariaDB [csd2204w18new]> insert into emp_details values(108, '  JK   ', '   JK  ', 'JK@jk.com', 123456, NULL, 'INSTRuCTOR', 1200.00, 100)$$
+Query OK, 1 row affected, 1 warning (0.10 sec)
+
+MariaDB [csd2204w18new]> select * from emp_details$$
++-------------+------------+-----------+---------------------------+--------------+------------+------------+----------+----------------+
+| EMPLOYEE_ID | FIRST_NAME | LAST_NAME | EMAIL                     | PHONE_NUMBER | HIRE_DATE  | JOB_ID     | SALARY   | COMMISSION_PCT |
++-------------+------------+-----------+---------------------------+--------------+------------+------------+----------+----------------+
+|         100 | STEVEN     | KING      | STEVEN.KING@GMAIL.COM     | 2345678      | 1998-01-14 | AD_PRES    | 24000.00 |           0.10 |
+|         101 | NEENA      | KOCHHAR   | NEENA.KOCHHAR@GMAIL.COM   | 2345678      | 2002-10-10 | AD_VP      | 17000.00 |           0.50 |
+|         102 | LEX        | DE HANN   | LEX.HANN@GMAIL.COM        | 2345678      | 1995-10-20 | AD_VP      | 17000.00 |           0.50 |
+|         103 | ALEXANDER  | HUNOLD    | ALEXANDER.HUNOLD@GMAIL.CO | 2345678      | 2002-11-23 | IT_PROG    |  9000.00 |           0.25 |
+|         104 | BRUCE      | ERNST     | BRUCE.ERNST@GMAIL.COM     | 2345678      | 2003-08-24 | IT_PROG    |  6000.00 |           0.25 |
+|         105 | DAVID      | AUSTIN    | DAVID.AUSTIN@GMAIL.COM    | 2345678      | 2005-04-10 | IT_PROG    |  4800.00 |           0.25 |
+|         106 | JK         | JK        | JK@jk.com                 | 123456       | NULL       | INSTRUCTOR |  1200.00 |           0.99 |
+|         107 | JK         | JK        | JK@jk.com                 | 123456       | NULL       | INSTRUCTOR |  1200.00 |           0.99 |
+|         108 | JK         | JK        | JK@jk.com                 | 123456       | NULL       | INSTRUCTOR |  1200.00 |           0.99 |
++-------------+------------+-----------+---------------------------+--------------+------------+------------+----------+----------------+
+9 rows in set (0.00 sec)
+
+MariaDB [csd2204w18new]> CREATE or REPLACE TRIGGER `emp_details_AUPD`
+    -> AFTER UPDATE ON emp_details FOR EACH ROW
+    -> BEGIN
+    -> INSERT INTO LOG_EMP_DETAILS_UPDATE VALUES (user(),
+    -> CONCAT('Update employee Record ',
+    -> OLD.FIRST_NAME,' Old Salary :',OLD.Salary,' New Salary : ',
+    -> NEW.Salary),NOW());
+    -> END$$
+Query OK, 0 rows affected (0.14 sec)
+
+MariaDB [csd2204w18new]> UPDATE EMP_DETAILS SET SALARY = SALARY + 1000;
+    -> $$
+Query OK, 9 rows affected (0.15 sec)
+Rows matched: 9  Changed: 9  Warnings: 0
+
+MariaDB [csd2204w18new]> select * from log_emp_details;
+    -> $$
++-------------+---------+---------------------+
+| EMPLOYEE_ID | SALARY  | EDTTIME             |
++-------------+---------+---------------------+
+|         106 | 1200.00 | 2018-01-24 08:44:28 |
+|         107 | 1200.00 | 2018-01-24 09:00:47 |
+|         108 | 1200.00 | 2018-01-24 09:03:47 |
++-------------+---------+---------------------+
+3 rows in set (0.00 sec)
+
+MariaDB [csd2204w18new]> select * from LOG_EMP_DETAILS_UPDATE$$
++----------------+----------------------------------------------------------------------------+---------------------+
+| USER           | DESCRIPTION                                                                | UDTTIME             |
++----------------+----------------------------------------------------------------------------+---------------------+
+| root@localhost | Update employee Record STEVEN Old Salary :24000.00 New Salary : 25000.00   | 2018-01-24 09:06:00 |
+| root@localhost | Update employee Record NEENA Old Salary :17000.00 New Salary : 18000.00    | 2018-01-24 09:06:00 |
+| root@localhost | Update employee Record LEX Old Salary :17000.00 New Salary : 18000.00      | 2018-01-24 09:06:00 |
+| root@localhost | Update employee Record ALEXANDER Old Salary :9000.00 New Salary : 10000.00 | 2018-01-24 09:06:00 |
+| root@localhost | Update employee Record BRUCE Old Salary :6000.00 New Salary : 7000.00      | 2018-01-24 09:06:00 |
+| root@localhost | Update employee Record DAVID Old Salary :4800.00 New Salary : 5800.00      | 2018-01-24 09:06:00 |
+| root@localhost | Update employee Record JK Old Salary :1200.00 New Salary : 2200.00         | 2018-01-24 09:06:00 |
+| root@localhost | Update employee Record JK Old Salary :1200.00 New Salary : 2200.00         | 2018-01-24 09:06:00 |
+| root@localhost | Update employee Record JK Old Salary :1200.00 New Salary : 2200.00         | 2018-01-24 09:06:00 |
++----------------+----------------------------------------------------------------------------+---------------------+
+9 rows in set (0.00 sec)
+
+MariaDB [csd2204w18new]> CREATE OR REPLACE TRIGGER `stud_marks_BUPD`
+    -> BEFORE UPDATE ON stud_marks FOR EACH ROW
+    -> BEGIN
+    -> SET NEW.TOTAL = NEW.SUB1 + NEW.SUB2 + NEW.SUB3 +
+    -> NEW.SUB4 + NEW.SUB5;
+    -> SET NEW.PERCENTAGE = NEW.TOTAL/5;
+    -> IF NEW.PERCENTAGE >=90
+    -> THEN SET NEW.GRADE = 'EXCELLENT';
+    -> ELSEIF NEW.PERCENTAGE>=75 AND NEW.PERCENTAGE<90
+    -> THEN SET NEW.GRADE = 'VERY GOOD';
+    -> ELSEIF NEW.PERCENTAGE>=60 AND NEW.PERCENTAGE<75
+    -> THEN SET NEW.GRADE = 'GOOD';
+    -> ELSEIF NEW.PERCENTAGE>=40 AND NEW.PERCENTAGE<60
+    -> THEN SET NEW.GRADE = 'AVERAGE';
+    -> ELSE SET NEW.GRADE = 'NOT PROMOTED';
+    -> END IF;
+    -> END$$
+Query OK, 0 rows affected (0.13 sec)
+
+MariaDB [csd2204w18new]> UPDATE STUD_MARKS SET SUB1 = 54, SUB2 = 69, SUB3 = 89, SUB4 =
+    -> 87, SUB5 = 59 WHERE STUDENT_ID = 1;
+    -> $$
+Query OK, 1 row affected (0.09 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [csd2204w18new]> SELECT * FROM STUD_MARKS$$
++------------+---------+-------+-------+-------+-------+-------+--------+------------+-------+
+| STUDENT_ID | NAME    | SUB1  | SUB2  | SUB3  | SUB4  | SUB5  | TOTAL  | PERCENTAGE | GRADE |
++------------+---------+-------+-------+-------+-------+-------+--------+------------+-------+
+|          1 | ALEX    | 54.00 | 69.00 | 89.00 | 87.00 | 59.00 | 358.00 |      71.60 | GOOD  |
+|          2 | BOB     |  NULL |  NULL |  NULL |  NULL |  NULL |   NULL |       NULL | NULL  |
+|          3 | CHARLEY |  NULL |  NULL |  NULL |  NULL |  NULL |   NULL |       NULL | NULL  |
+|          4 | DONNA   |  NULL |  NULL |  NULL |  NULL |  NULL |   NULL |       NULL | NULL  |
++------------+---------+-------+-------+-------+-------+-------+--------+------------+-------+
+4 rows in set (0.00 sec)
+
+MariaDB [csd2204w18new]> create trigger numberCheck
+    -> before insert on number
+    -> for each row
+    -> begin
+    -> if (new.no > 10)
+    -> insert into number values(new.no);
+    -> end if
+    -> else
+    -> return
+    -> end else
+    -> END$$
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'insert into number values(new.no);
+end if
+else
+return
+end else
+END' at line 6
+MariaDB [csd2204w18new]> create trigger numberCheck
+    -> before insert on number
+    -> for each row
+    -> begin
+    -> if (new.no > 10)
+    -> begin
+    -> insert into number values(new.no);
+    -> end
+    -> end if
+    -> else
+    -> return
+    -> end else
+    -> END$$
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'begin
+insert into number values(new.no);
+end
+end if
+else
+return
+end else
+END' at line 6
+MariaDB [csd2204w18new]> create trigger numberCheck
+    -> before insert on number
+    -> for each row
+    -> begin
+    -> if (new.no > 10)
+    -> then
+    -> insert into number values(new.no);
+    -> else
+    -> return
+    -> END$$
+ERROR 1313 (42000): RETURN is only allowed in a FUNCTION
+MariaDB [csd2204w18new]> create trigger numberCheck
+    -> before insert on number
+    -> for each row
+    -> begin
+    -> if (new.no > 10)
+    -> then
+    -> insert into number values(new.no);
+    -> END$$
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 8
+MariaDB [csd2204w18new]> create trigger numberCheck
+    -> before insert on number
+    -> for each row
+    -> begin
+    -> if (new.no > 10)
+    -> then
+    -> insert into number values(new.no);
+    -> end if;
+    -> END$$
+ERROR 1235 (42000): This version of MariaDB doesn't yet support 'multiple triggers with the same action time and event for one table'
+MariaDB [csd2204w18new]> show tablesl
+    -> $$
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'tablesl' at line 1
+MariaDB [csd2204w18new]> show tables$$
++-------------------------+
+| Tables_in_csd2204w18new |
++-------------------------+
+| emp_details             |
+| log_emp_details         |
+| log_emp_details_update  |
+| number                  |
+| price_logs              |
+| stud_marks              |
+| user_change_logs        |
++-------------------------+
+7 rows in set (0.00 sec)
+
+MariaDB [csd2204w18new]> CREATE or REPLACE TRIGGER before_products_update
+    -> BEFORE UPDATE on Products FOR EACH ROW
+    -> BEGIN
+    -> INSERT INTO price_logs (product_code,price) VALUES(old.c
+    -> ode,old.price);
+    -> END$$
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'ode,old.price);
+END' at line 5
+MariaDB [csd2204w18new]> CREATE or REPLACE TRIGGER before_products_update
+    -> BEFORE UPDATE on Products FOR EACH ROW
+    -> BEGIN
+    -> INSERT INTO price_logs (product_code,price) VALUES(old.code,old.price);
+    -> END$$
+ERROR 1146 (42S02): Table 'csd2204w18new.products' doesn't exist
